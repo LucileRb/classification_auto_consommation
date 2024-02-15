@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import re
 from IPython.display import display
 
 ########## Fonctions ##########
@@ -13,6 +14,7 @@ def addlabels(x, y):
     """ Fonction pour ajouter valeurs sur graphs """
     for i in range(len(x)):
         plt.text(i, y[i]//2, y[i], ha = 'center', fontstyle = 'italic')
+
 
 # Duplicats
 def remove_duplicates(df):
@@ -68,3 +70,14 @@ def nan_detection(df):
         plt.figure(figsize = (15, 7))
         sns.heatmap(df.isna(), cbar = False)
         plt.show()
+
+
+########## Catégorie ##########
+def get_category(row):
+    match = re.search(r'(?:\w+\s+){2}(?=\>\>)', row['product_category_tree'])
+    if match:
+        result = match.group(0).strip()
+        return result
+    
+
+
