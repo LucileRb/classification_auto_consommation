@@ -78,6 +78,6 @@ def get_category(row):
     if match:
         result = match.group(0).strip()
         return result
-    
+
 
 
