@@ -21,7 +21,7 @@ from plot_keras_history import show_history, plot_history
 # tensorflow
 import tensorflow as tf
 from tensorflow.keras.models import Model, Sequential
-from tensorflow.keras.optimizers.legacy import Adam
+#from tensorflow.keras.optimizers.legacy import Adam
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.layers import GlobalAveragePooling2D, GlobalAveragePooling1D, Flatten, Dense, Dropout
 from tensorflow.keras.layers import Rescaling, RandomFlip, RandomRotation, RandomZoom
@@ -203,9 +203,13 @@ def create_model_fct2():
 #    image = (image / 255.0)
 #    return image, label
 
+
+# LIRE LA DOC
 def dataset_fct(batch_size, path, validation_split = 0, data_type = None):
     dataset = tf.keras.utils.image_dataset_from_directory(
-                    path, labels = 'inferred', label_mode = 'categorical',
+                    path,
+                    labels = None, # changer 'inferred' en None (cf doc)
+                    label_mode = 'categorical',
                     class_names = None, batch_size = batch_size, image_size = (224, 224), shuffle = True, seed = 42,
                     validation_split = validation_split, subset = data_type
                     )
