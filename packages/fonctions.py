@@ -31,7 +31,8 @@ from tensorflow.keras.applications.vgg16 import preprocess_input
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
 from tensorflow.keras.utils import to_categorical
 
-########## Fonctions ##########
+##########################################################################################################################################################################
+########## Fonctions générlistes ##########
 
 # Labels sur graphs
 def addlabels(x, y):
@@ -61,7 +62,6 @@ def remove_duplicates(df):
 
         # nombre de duplicats dans le jeu de données après processing
         print(f'Nombre de duplicats dans le jeu de données après processing: {df.duplicated().sum()}')
-
 
 
 # Données manquantes
@@ -103,8 +103,9 @@ def get_category(row):
         result = match.group(0).strip()
         return result
 
-
-
+##########################################################################################################################################################################
+################################################## Fonctions de préparation des données images ######################################################################
+# DIRE A QUOI CA SERT
 def data_fct(df, path):
     list_photos = [file for file in path]
     print(len(list_photos))
@@ -113,10 +114,12 @@ def data_fct(df, path):
     data['label_name'] = df['category']
     return data
 
+# DIRE A QUOI CA SERT
 def list_fct(data, name):
     list_image_name = [data['image_path'][i] for i in range(len(data)) if data['label_name'][i] == name]
     return list_image_name
 
+# DIRE A QUOI CA SERT
 def conf_mat_transform(y_true, y_pred):
     conf_mat = metrics.confusion_matrix(y_true, y_pred)
     corresp = np.argmax(conf_mat, axis = 0)
@@ -128,7 +131,9 @@ def conf_mat_transform(y_true, y_pred):
     
     return labels['y_pred_transform']
 
-
+##########################################################################################################################################################################
+################################################## Fonctions de création de modèles images blabla ######################################################################
+# DIRE A QUOI CA SERT
 def create_model_fct():
     # Récupération modèle pré-entraîné
     model0 = VGG16(include_top = False, weights = 'imagenet', input_shape = (224, 224, 3))
@@ -154,6 +159,8 @@ def create_model_fct():
 
     return model
 
+
+# DIRE A QUOI CA SERT
 def image_prep_fct(data):
     prepared_images = []
     for image_num in range(len(data['image_path'])):
@@ -165,6 +172,8 @@ def image_prep_fct(data):
         prepared_images_np = np.array(prepared_images)
     return prepared_images_np
 
+
+# DIRE A QUOI CA SERT
 def create_model_fct2():
     # Data augmentation
     data_augmentation = Sequential([
@@ -204,6 +213,7 @@ def create_model_fct2():
 #    return image, label
 
 
+# DIRE A QUOI CA SERT
 # LIRE LA DOC
 def dataset_fct(batch_size, path, validation_split = 0, data_type = None):
     dataset = tf.keras.utils.image_dataset_from_directory(
@@ -215,7 +225,7 @@ def dataset_fct(batch_size, path, validation_split = 0, data_type = None):
                     )
     return dataset
 
-
+# DIRE A QUOI CA SERT
 def data_flow_fct(batch_size, data, datagen, data_type = None):
     data_flow = datagen.flow_from_dataframe(
         data,
