@@ -6,30 +6,29 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import re
 from IPython.display import display
-from sklearn import cluster, metrics
 
 # sklearn
+from sklearn import cluster, metrics
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, auc, roc_auc_score, roc_curve
 from sklearn import preprocessing
 from sklearn import manifold, decomposition
-from sklearn import cluster, metrics
 
 from plot_keras_history import show_history, plot_history
 
 
 # tensorflow
 import tensorflow as tf
-from tensorflow.keras.models import Model, Sequential
+from keras.models import Model, Sequential
 #from tensorflow.keras.optimizers.legacy import Adam
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from tensorflow.keras.layers import GlobalAveragePooling2D, GlobalAveragePooling1D, Flatten, Dense, Dropout
-from tensorflow.keras.layers import Rescaling, RandomFlip, RandomRotation, RandomZoom
-from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
-from tensorflow.keras.applications.vgg16 import VGG16
-from tensorflow.keras.applications.vgg16 import preprocess_input
-from tensorflow.keras.preprocessing.image import load_img, img_to_array
-from tensorflow.keras.utils import to_categorical
+from keras.preprocessing.image import ImageDataGenerator
+from keras.layers import GlobalAveragePooling2D, GlobalAveragePooling1D, Flatten, Dense, Dropout
+from keras.layers import Rescaling, RandomFlip, RandomRotation, RandomZoom
+from keras.callbacks import EarlyStopping, ModelCheckpoint
+from keras.applications.vgg16 import VGG16
+from keras.applications.vgg16 import preprocess_input
+from keras.utils import load_img, img_to_array
+from keras.utils import to_categorical
 
 ##########################################################################################################################################################################
 ########## Fonctions générlistes ##########
@@ -112,6 +111,7 @@ def data_fct(df, path):
     data = pd.DataFrame()
     data['image_path'] = list_photos
     data['label_name'] = df['category']
+    data['image_name'] = df['image']
     return data
 
 # DIRE A QUOI CA SERT
@@ -134,7 +134,7 @@ def conf_mat_transform(y_true, y_pred):
 ##########################################################################################################################################################################
 ################################################## Fonctions de création de modèles images blabla ######################################################################
 # DIRE A QUOI CA SERT
-def create_model_fct():
+def create_model_fct_1():
     # Récupération modèle pré-entraîné
     model0 = VGG16(include_top = False, weights = 'imagenet', input_shape = (224, 224, 3))
 
@@ -159,6 +159,31 @@ def create_model_fct():
 
     return model
 
+def create_model_fct_2():
+    # Récupération modèle pré-entraîné
+    model0 = VGG16(include_top = False, weights = 'imagenet', input_shape = (224, 224, 3))
+
+    # Layer non entraînables = on garde les poids du modèle pré-entraîné
+    for layer in model0.layers:
+        layer.trainable = False
+
+    # Récupérer la sortie de ce réseau
+    x = model0.output
+    # Compléter le modèle
+    x = GlobalAveragePooling2D()(x)
+    x = Dense(256, activation = 'relu')(x)
+    x = Dropout(0.5)(x)
+    predictions = Dense(4, activation = 'softmax')(x) # 4 = nb de catégories
+
+    # Définir le nouveau modèle
+    model = Model(inputs = model0.input, outputs = predictions)
+    # compilation du modèle 
+    model.compile(loss = 'sparse_categorical_crossentropy', optimizer = 'adam', metrics = ['accuracy']) # optimizer = 'rmsprop'
+
+    print(model.summary())
+
+    return model
+
 
 # DIRE A QUOI CA SERT
 def image_prep_fct(data):
@@ -173,7 +198,7 @@ def image_prep_fct(data):
     return prepared_images_np
 
 
-# DIRE A QUOI CA SERT
+# DIRE A QUOI CA SERT -> DATA AUGMENTATION
 def create_model_fct2():
     # Data augmentation
     data_augmentation = Sequential([
@@ -215,13 +240,18 @@ def create_model_fct2():
 
 # DIRE A QUOI CA SERT
 # LIRE LA DOC
-def dataset_fct(batch_size, path, validation_split = 0, data_type = None):
+def dataset_fct(batch_size, path, labels = None, validation_split = 0, data_type = None):
     dataset = tf.keras.utils.image_dataset_from_directory(
                     path,
-                    labels = None, # changer 'inferred' en None (cf doc)
-                    label_mode = 'categorical',
-                    class_names = None, batch_size = batch_size, image_size = (224, 224), shuffle = True, seed = 42,
-                    validation_split = validation_split, subset = data_type
+                    labels = labels,
+                    label_mode = 'int',
+                    class_names = None,
+                    batch_size = batch_size,
+                    image_size = (224, 224),
+                    shuffle = True,
+                    seed = 42,
+                    validation_split = validation_split,
+                    subset = data_type
                     )
     return dataset
 
