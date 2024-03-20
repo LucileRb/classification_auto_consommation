@@ -3,40 +3,23 @@ import numpy as np
 import pandas as pd
 
 # sklearn
-from sklearn import cluster, metrics
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, auc, roc_auc_score, roc_curve
-from sklearn import preprocessing
-from sklearn import manifold, decomposition
-
-from plot_keras_history import show_history, plot_history
-
+from sklearn import metrics
 
 # tensorflow
 import tensorflow as tf
-from keras.models import Model, Sequential
-#from tensorflow.keras.optimizers.legacy import Adam
-from keras.preprocessing.image import ImageDataGenerator
-from keras.layers import GlobalAveragePooling2D, GlobalAveragePooling1D, Flatten, Dense, Dropout
-from keras.layers import Rescaling, RandomFlip, RandomRotation, RandomZoom
-from keras.callbacks import EarlyStopping, ModelCheckpoint
-from keras.applications.vgg16 import VGG16
+
+# Keras
 from keras.applications.vgg16 import preprocess_input
 from keras.utils import load_img, img_to_array
-from keras.utils import to_categorical
-
-
 
 
 ##########################################################################################################################################################################
 ################################################## Fonctions de préparation des données images ######################################################################
 
-# DIRE A QUOI CA SERT
 def list_fct(data, name):
     list_image_name = [data['image_path'][i] for i in range(len(data)) if data['label_name'][i] == name]
     return list_image_name
 
-# DIRE A QUOI CA SERT
 def conf_mat_transform(y_true, y_pred):
     conf_mat = metrics.confusion_matrix(y_true, y_pred)
     corresp = np.argmax(conf_mat, axis = 0)
@@ -45,11 +28,10 @@ def conf_mat_transform(y_true, y_pred):
     labels = pd.Series(y_true, name = 'y_true').to_frame()
     labels['y_pred'] = y_pred
     labels['y_pred_transform'] = labels['y_pred'].apply(lambda x : corresp[x])
-    
+
     return labels['y_pred_transform']
 
 
-# DIRE A QUOI CA SERT
 def image_prep_fct(data):
     prepared_images = []
     for image_num in range(len(data['image_path'])):
@@ -61,8 +43,7 @@ def image_prep_fct(data):
         prepared_images_np = np.array(prepared_images)
     return prepared_images_np
 
-# DIRE A QUOI CA SERT
-# LIRE LA DOC
+
 def dataset_fct(batch_size, path, labels = None, validation_split = 0, data_type = None):
     dataset = tf.keras.utils.image_dataset_from_directory(
                     path,
@@ -78,7 +59,6 @@ def dataset_fct(batch_size, path, labels = None, validation_split = 0, data_type
                     )
     return dataset
 
-# DIRE A QUOI CA SERT
 def data_flow_fct(batch_size, data, datagen, data_type = None):
     data_flow = datagen.flow_from_dataframe(
         data,

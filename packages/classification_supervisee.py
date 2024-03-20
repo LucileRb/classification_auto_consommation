@@ -1,33 +1,13 @@
 ######## IMPORTS ########
 
-# sklearn
-from sklearn import cluster, metrics
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, auc, roc_auc_score, roc_curve
-from sklearn import preprocessing
-from sklearn import manifold, decomposition
-
-from plot_keras_history import show_history, plot_history
-
-
-# tensorflow
-import tensorflow as tf
+# keras
 from keras.models import Model, Sequential
-#from tensorflow.keras.optimizers.legacy import Adam
-from keras.preprocessing.image import ImageDataGenerator
-from keras.layers import GlobalAveragePooling2D, GlobalAveragePooling1D, Flatten, Dense, Dropout
-from keras.layers import Rescaling, RandomFlip, RandomRotation, RandomZoom
-from keras.callbacks import EarlyStopping, ModelCheckpoint
+from keras.layers import GlobalAveragePooling2D, Dense, Dropout, Rescaling, RandomFlip, RandomRotation, RandomZoom
 from keras.applications.vgg16 import VGG16
-from keras.applications.vgg16 import preprocess_input
-from keras.utils import load_img, img_to_array
-from keras.utils import to_categorical
-
-
 
 ##########################################################################################################################################################################
 ################################################## Fonctions de création de modèles images blabla ######################################################################
-# DIRE A QUOI CA SERT
+
 def create_model_fct_1():
     # Récupération modèle pré-entraîné
     model0 = VGG16(include_top = False, weights = 'imagenet', input_shape = (224, 224, 3))
@@ -78,7 +58,7 @@ def create_model_fct_2():
 
     return model
 
-# DIRE A QUOI CA SERT -> DATA AUGMENTATION
+# DATA AUGMENTATION
 def create_model_fct2():
     # Data augmentation
     data_augmentation = Sequential([

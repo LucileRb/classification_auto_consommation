@@ -1,8 +1,5 @@
 ########## Imports ##########
 import pandas as pd
-import numpy as np
-import json
-import http.client
 import requests
 
 ########## Fonction ##########
