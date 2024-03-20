@@ -17,3 +17,32 @@ TO DO
 -> l’étude de faisabilité
 -> la classification supervisée
 -> test de l’API
+
+
+# Notebooks
+NB -> dossier data hors du dossier code pour ne pas l'importer dans github
+
+1) Data_exploration_EDA.ipynb
+Analyse exploratoire des données, gestion des données manquantes et des outliers, extraction de la target (catégorie des produits) et export des données "nettoyées" sous forme de fichier .csv
+
+2) Data_exploration_text_analysis.ipynb
+- prétraitement
+- analyse de features
+- réduction 2D
+- calcul de similarité
+
+Méthodes testées :
+- BOW
+- TF-IDF
+- Word embedding : GloVe, Word2Vec, Fastext(principe évoqué mais méthode non testée)
+- LDA
+- BERT
+- USE
+
+3) Data_explo_prep_images.ipynb
+
+
+4) Classification_supervisee_images.ipynb
+
+
+5) Api_request.ipynb
