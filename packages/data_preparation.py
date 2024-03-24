@@ -9,7 +9,7 @@ from sklearn import metrics
 import tensorflow as tf
 
 # Keras
-from keras.applications.vgg16 import preprocess_input
+from keras.applications.vgg16 import VGG16, preprocess_input
 from keras.utils import load_img, img_to_array
 
 
